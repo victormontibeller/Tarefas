@@ -3,6 +3,9 @@ package com.Tarefas.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,22 +26,22 @@ public class TarefaController {
     private TarefaService tarefaService;
 
     @PostMapping
-    private List<Tarefa> create (@RequestBody Tarefa tarefa){
-        return tarefaService.create(tarefa);
+    ResponseEntity<List<Tarefa>> create (@Validated @RequestBody Tarefa tarefa){
+        return ResponseEntity.status(HttpStatus.CREATED).body(tarefaService.create(tarefa));
     }
 
     @GetMapping 
-    private List<Tarefa> list (){
+    List<Tarefa> list (){
         return tarefaService.list();
     }
     
     @PutMapping
-    private List<Tarefa> update (@RequestBody Tarefa tarefa){
-        return this.tarefaService.update(tarefa);
+    List<Tarefa> update (@PathVariable Long id, @RequestBody Tarefa tarefa){
+        return tarefaService.update(id, tarefa);
     }
     
     @DeleteMapping("{id}")
-    private List<Tarefa> delete (@PathVariable("id") Long id){
+    List<Tarefa> delete (@PathVariable Long id){
         return tarefaService.delete(id);
     }    
 }

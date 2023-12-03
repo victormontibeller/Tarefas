@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.Tarefas.entity.Tarefa;
+import com.Tarefas.exception.BadRequestException;
 import com.Tarefas.repository.TarefaRepository;
 
 @Service
@@ -26,13 +27,23 @@ public class TarefaService {
         return tarefaRepository.findAll(sort);
     }
     
-    public List<Tarefa> update(Tarefa tarefa){
-        tarefaRepository.save(tarefa);
-        return this.list();
-    }
-    
-    public List<Tarefa> delete(Long id){
-        tarefaRepository.deleteById(id);
-        return this.list();
-    }    
+  public List<Tarefa> update(Long id, Tarefa tarefa) {
+    tarefaRepository.findById(id).ifPresentOrElse((existingTodo) -> {
+      tarefa.setId(id);
+      tarefaRepository.save(tarefa);
+    }, () -> {
+      throw new BadRequestException("Tarefa %d não existe! ".formatted(id));
+
+    });
+
+    return list();
+
+  }
+
+  public List<Tarefa> delete(Long id) {
+    tarefaRepository.findById(id).ifPresentOrElse((existingTodo) -> tarefaRepository.delete(existingTodo), () -> {
+      throw new BadRequestException("Tarefa %d não existe! ".formatted(id));
+    });
+    return list();
+  }  
 }
