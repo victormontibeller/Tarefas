@@ -15,11 +15,3 @@ API para gerenciamento de tarefas.
 - [Mysql](https://dev.mysql.com/downloads/)
 - [H2](https://www.h2database.com/html/main.html))
 
-## Práticas adotadas
-
-- SOLID, DRY
-- API REST
-- Consultas com Spring Data JPA
-- Injeção de Dependências
-- Tratamento de respostas de erro
-- Geração automática do Swagger com a OpenAPI 3
